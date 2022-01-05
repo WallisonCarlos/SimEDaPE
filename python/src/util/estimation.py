@@ -122,7 +122,7 @@ def def_bigger_errors_g():
     bigger_errors['km_traveled'] = -1
     return bigger_errors
 
-def estimation(links_info, clustering, wps, mean, std, mean_2, std_2, X_2, time_series_labels_first_indexs, time_series_labels_first, time_series_labels_first_dict, time_series_labels_second_dict, simulation_points_indexs, printer = False):
+def estimation(links_info, clustering, wps, mean, std, mean_2, std_2, X_2, time_series_labels_first_indexs, time_series_labels_first, time_series_labels_first_dict, time_series_labels_second_dict, simulation_points_indexs, printer = False, multiple = False):
     start_time = time.time()
     print(start_time)
     metrics = {}
@@ -147,7 +147,7 @@ def estimation(links_info, clustering, wps, mean, std, mean_2, std_2, X_2, time_
                 serie_translation_revert = estimate(w1, warping_path, std_s2, mean_s2)
                 link_id = get_link_id_from(time_series_labels_first[k])
                 
-                calc = calc_metrics(serie_translation_revert, link_id, links_info, "Second complete - "+str(link_id), printer)
+                calc = calc_metrics(serie_translation_revert, link_id, links_info, "Second complete - "+str(link_id), (not multiple and printer))
                 metrics['average_speed'].append(calc['average_speed'])
                 metrics['percentage_of_track'].append(calc['percentage_of_track'])
                 metrics['average_vehicles'].append(calc['average_vehicles'])

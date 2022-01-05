@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import glob
+import os
 
 def read_csv(data_file, sep = ';', dtype = {"link": int, "length": int, "capacity": int, "freespeed": int}, usecols = ["link", "length", "capacity", "freespeed"]):
     """Função para ler um aquivo csv e retornar um data frame do pandas.
@@ -93,18 +94,21 @@ def read_single_scenario(dir_files, sep = ';', intervals = {"start_time": int, "
     return max_size, street_series, street_series_vehicles, street_vehicles, time_series_labels
 
 
-def read_percentage_scenarios(dir_paths, sep = ';', percentage = {'start': int, 'end': int, 'span': int}, intervals = {"start_time": int, "end_time": int, "interval_size": int}):
+def read_percentage_scenarios(dir_paths, sep = ';', intervals = {"start_time": int, "end_time": int, "interval_size": int}):
     data_set_percentage = {}
-    data_paths = glob.glob(dir_paths)
+    data_paths = os.listdir(dir_paths)
     for dir_files in data_paths:
-        max_size, street_series, street_series_vehicles, street_vehicles, time_series_labels = read_single_scenario(dir_files, sep = ';', intervals = intervals)
-        data_set_percentage[dir_files] = {}
-        data_set_percentage[dir_files]['max_size'] = max_size
-        data_set_percentage[dir_files]['street_series'] = street_series
-        data_set_percentage[dir_files]['street_series_vehicles'] = street_series_vehicles
-        data_set_percentage[dir_files]['street_vehicles'] = street_vehicles
-        data_set_percentage[dir_files]['time_series_labels'] = time_series_labels
-    return data_set_percentage
+        dir_files_complete = dir_paths+dir_files+'/'
+        if os.path.isdir(dir_files_complete):
+            print("Read dataset "+dir_files)
+            max_size, street_series, street_series_vehicles, street_vehicles, time_series_labels = read_single_scenario(dir_files_complete, sep = sep, intervals = intervals)
+            data_set_percentage[dir_files] = {}
+            data_set_percentage[dir_files]['max_size'] = max_size
+            data_set_percentage[dir_files]['street_series'] = street_series
+            data_set_percentage[dir_files]['street_series_vehicles'] = street_series_vehicles
+            data_set_percentage[dir_files]['street_vehicles'] = street_vehicles
+            data_set_percentage[dir_files]['time_series_labels'] = time_series_labels
+    return data_set_percentage, data_paths
 
 
         
